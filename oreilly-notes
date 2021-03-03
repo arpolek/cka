@@ -1,0 +1,573 @@
+https://learning.oreilly.com/videos/certified-kubernetes-administrator/9780136677482/9780136677482-CKA1_01_01_02
+
+======================= module 1 - getting started =======================
+
+kubectl get pods -n kube-system
+kubectl api-resources | less
+kubectl api-versions
+kubectl get all -n kube-system
+kubectl get all --all-namespaces
+kubectl get pods --all-namespaces
+kubectl get nodes
+
+kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=172.16.0.110
+mkdir -p $HOME/.kube
+sudo cp -l /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl cluster-info
+
+CNI - container network interface -> Weave add-on
+different: Flannel, Calico, AWS VPC, 
+network policy and RBAC
+kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+
+kubeadm join 172.16.0.110:6443 --token iyfhwy.fnpdpri4raav1g2y \
+    --discovery-token-ca-cert-hash sha256:525a005b9797ad612aa73733450a2df601997be63c523c0604572cea7cb17a31
+
+Client confguration:
+/etc/kubernetes/admin.conf -> copied to ~/.kube/config
+
+kubectl config
+kubectl config view
+
+======================= module 2 - managing pods and deployments =======================
+
+kubectl auth can-i
+kubectl auth can-i create deployments
+kubectl auth can-i create pods --as linda 
+kubectl auth can-i create pods --as linda --namespace apps
+
+kubectl api-resources (it’s a front-end which uses curl in backend)
+kubectl proxy
+	curl http://localhost:8001/apis
+kubectl api-versions
+kubectl explain
+
+bash-completion
+kubectl completion bash
+kubectl completion bash >> ~/.bashrc (for my user)
+sudo kubectl completion bash > /etc/bach_completion.d/kubectl (for all users)
+
+kubectl -h
+
+kubectl create deployment --image=nginx mynginx
+kubectl create -f busybox.yaml
+
+kubectl explain pod.spec
+kubectl explain pod.spec.container
+
+curl --cert myuser.pem --key myuser-key.pem --cacert /root/myca.pem https://controller:6443/api/v1
+kubectl proxy --port=8001 &
+curl http://localhost:8001
+curl http://localhost:8001/version
+curl http://localhost:8001/api/v1/namespaces/default/pods
+curl http://localhost:8001/api/v1/namespaces/default/pods/busybox2
+curl -XDELETE http://localhost:8001/api/v1/namespaces/default/pods/busybox2
+
+etcdctl - interacting with k8s database
+etcdctl2
+sudo yum provides */etcdctl
+sudo yum install -y etcd
+etcdctl -h 
+ETCDCTL_API=3 etcdctl -h
+
+kubectl get ns
+kubectl get all --all-namespaces
+kubectl create ns dev
+kubectl describe ns dev
+kubectl get ns dev -o yaml
+
+kubectl create deployment --image=nginx newnginx
+kubectl get all 
+kubectl delete replicasets.apps newnginx-89dc96c75
+kubectl get deployments.apps newnginx -o yaml | less 
+kubectl create deployment --dry-run=client --image=nginx --output=yaml demodeployment > demodeployment.yaml
+
+kubectl scale deployment mynginx --replicas=3
+kubectl edit deployments.apps mynginx
+
+kubectl get deployments --show-labels
+kubectl label deployments.apps mynginx state=demo
+kubectl get deployments.apps --selector state=demo
+kubectl get all --selector app=mynginx
+kubectl describe deployments.apps newnginx1
+kubectl label deployments.apps mynginx state-
+
+kubectl get deployments.apps nginx -o yaml
+kubectl explain deployments.spec.strategy
+kubectl explain deployments.spec.strategy.rollingUpdate
+
+kubectl rollout -h
+kubectl rollout history deployment
+kubectl edit deployments.apps rolling-nginx
+kubectl rollout history deployment
+kubectl get all 
+kubectl describe deployments.apps rolling-nginx
+kubectl rollout history deployment rolling-nginx
+kubectl rollout history deployment rolling-nginx --revision=2
+kubectl rollout undo deployment rolling-nginx --to-revision=1
+--record=true			-> for troubleshooting
+
+kubectl create -f init1.yaml
+kubectl expose -h
+kubectl expose deployment mynginx --port=80 --name=myservice
+kubectl create -f init-container.yaml
+
+vim stateful.yaml
+vim daemonset-fluentd.yaml
+kubectl create -f daemonset-fluentd.yaml
+kubectl get nodes
+kubectl get daemonsets.apps -n kube-system
+kubectl get pods -n kube-system
+
+!!!!!!!!!!!!!!!!! STORAGE !!!!!!!!!!!!!!!!!
+
+kubectl create -f storage/shared-volume.yaml
+kubectl get pods 
+kubectl describe pod/sharedvolume -n default
+kubectl exec -it sharedvolume -- /bin/bash
+	ls
+	touch centos1/newfile1
+	exit
+kubectl exec -it sharedvolume -c centos2 -- /bin/bash
+	ls centos2
+
+kubectl explain pods.spec.volumes
+vim storage/pv.yaml
+kubectl create -f storage/pv.yaml
+kubectl get pv
+kubectl get pv pv-volume
+kubectl explain pv.spec.storageClassName
+vim storage/pv-nfs.yaml
+kubectl create -f storage/pv-nfs.yaml
+kubectl get pv
+
+vim storage/pvc.yaml
+kubectl get pv
+kubectl create -f storage/pvc.yaml
+kubectl get pvc
+kubectl get pv
+vim storage/nfs-pvc.yaml
+kubectl create -f storage/nfs-pvc.yaml
+kubectl get pvc
+kubectl get pv
+
+vim storage/pv-pvc-pod.yaml
+kubectl create -f storage/pv-pvc-pod.yaml
+kubectl describe pod/local-pv-pod1 -n storage-lab
+kubectl get pv --all-namespaces
+
+vim storage/nginx-custom-config.conf
+kubectl create cm nginx-cm --from-file storage/nginx-custom-config.conf
+kubectl get cm nginx-cm -o yaml
+vim storage/nginx-cm.yaml
+kubectl create -f storage/nginx-cm.yaml
+kubectl exec -it nginx-cm /bin/bash
+	cat /etc/nginx/conf.d
+	exit
+kubectl create cm myconfig --from-literal=color=red
+kubectl get cm myconfig -o yaml
+vim storage/test-cm-pod.yaml
+kubectl create -f storage/test-cm-pod.yaml
+kubectl describe pod test-pod
+kubectl exec -it test-pod -- /bin/bash (kubectl exec -it test-pod -- sh)
+	echo $COLOR
+	exit
+
+kubectl create secret generic secretstuff --from-literal=password=dupa123 --from-literal=user=artur
+kubectl get secret secretstuff -o yaml
+vim storage/secret-pod.yaml
+kubectl create -f storage/secret-pod.yaml
+kubectl describe pod secretbox-pod | less
+kubectl exec -it secretbox-pod /bin/sh
+	cat /secretstuff/user -> plain text
+	cat /secretstuff/password -> plain text
+	exit
+kubectl create secret generic mysql --from-literal=password=dupa123
+kubectl get secrets mysql -o yaml
+vim storage/secret-as-var-pod.yaml
+kubectl create -f storage/secret-as-var-pod.yaml
+kubectl exec -it mysql-pod -- bin/sh
+	echo $MYSQL_ROOT_PASSWORD
+	exit
+kubectl get secrets mysql -o yaml
+kubectl get pod mysql-pod -o yaml
+
+STORAGE LAB
+	vim lab6/lab6-pv.yaml
+	kubectl create -f lab6/lab6-pv.yaml
+	vim lab6/lab6-pvc.yaml
+	kubectl create -f lab6/lab6-pvc.yaml
+	kubectl get pv
+	kubectl get pvc
+	vim lab6/lab6-pod.yaml
+	kubectl create -f lab6/lab6-pod.yaml
+	kubectl describe pod lab6-pod
+
+!!!!!!!!!!!!!!!!! NETWORKING !!!!!!!!!!!!!!!!!
+
+vim pod-networking/net-demo-pod.yaml
+kubectl create -f pod-networking/net-demo-pod.yaml
+kubectl get pods
+kubectl exec net-demo -c busynet1 -- ip a s
+kubectl exec net-demo -c busynet2 -- ip a s
+kubectl get pod net-demo -o wide
+ssh root@worker1
+	docker ps | grep pause | grep net
+
+kubectl get pods -o wide
+kubectl exec <pod> -- ip a s
+kubectl exec <pod> -- ping <another pod>
+
+vim svc-net-pod.yaml
+kubectl create -f svc-net-pod.yaml
+kubectl get pods
+kubectl expose pod net-pod --type=NodePort --port=22
+kubectl get svc
+
+vim ingress.yaml
+kubectl get pods
+vim ingress.yaml
+kubectl create -f ingress.yaml
+kubectl describe ingresses.networking.k8s.io minimal-ingress
+
+vim lab7-pod.yaml
+kubectl create -f lab7-pod.yaml
+kubectl get pods 
+vim lab7-svc.yaml
+kubectl create -f lab7-svc.yaml
+kubectl get svc
+kubectl get pods 
+
+======================= module 3 - cluster management =======================
+
+!!!!!!!!!!!!!!!!! SCHEDULING !!!!!!!!!!!!!!!!!
+
+vim custom-resource-definition/crd-object.yaml
+kubectl create -f custom-resource-definition/crd-object.yaml
+kubectl get crd
+vim custom-resource-definition/crd-backup.yaml
+kubectl explain backup.spec
+kubectl create -f custom-resource-definition/crd-backup.yaml
+kubectl get backups.stable.linux.com
+kubectl get backups.stable.linux.com mybackup -o yaml
+
+kubectl label nodes worker1.localdomain disktype=ssd
+kubectl get nodes --show-labels
+vim scheduling/selector-pod.yaml
+kubectl apply -f scheduling/selector-pod.yaml
+kubectl get pods -o wide
+kubectl describe pod nginx-on-ssd | less
+
+kubectl explain pod.spec.affinity
+kubectl explain pod.spec.affinity.podAffinity
+kubectl explain pod.spec.affinity.podAntiAffinity
+kubectl explain pod.spec.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution
+vim scheduling/pod-with-node-affinity.yaml
+kubectl create -f scheduling/pod-with-node-affinity.yaml
+kubectl get pods 
+	-> state pending
+kubectl delete  -f scheduling/pod-with-node-affinity.yaml
+kubectl get pods
+vim scheduling/pod-with-node-affinity.yaml -> required paragraph removed
+kubectl create -f scheduling/pod-with-node-affinity.yaml
+kubectl get pods
+kubectl get pods -o wide | grep aff
+kubectl describe pod with-node-affinity
+
+vim scheduling/pod-with-pod-affinity.yaml
+kubectl create -f scheduling/pod-with-pod-affinity.yaml
+kubectl describe pod with-pod-affinity
+kubectl get pods
+
+vim scheduling/redis-with-pod-affinity.yaml
+kubectl create -f scheduling/redis-with-pod-affinity.yaml
+kubectl get deployments.apps redis-cache
+kubectl get pods -o wide
+kubectl drain worker2.localdomain --force
+kubectl get pods -o wide 
+	-> pending
+kubectl describe pod redis-cache-<worker2> 
+	-> wasn’t run because of antiAffinity
+vim scheduling/webserver-with-pod-affinity.yaml
+kubectl create -f scheduling/webserver-with-pod-affinity.yaml
+kubectl get deployments
+kubectl describe pod web-server-7886dfdc59-4gpkk | less
+kubectl get pods -o wide
+
+kubectl taint -h | less
+kubectl taint nodes worker1.localdomain key1=value1:NoSchedule
+kubectl taint nodes worker1.localdomain key1=value1:NoSchedule-
+kubectl taint nodes worker1.localdomain key2=value2:NoSchedule
+kubectl describe nodes worker1.localdomain | less
+kubectl create deployment taint-nginx --image=nginx
+kubectl get pods
+kubectl scale deployment taint-nginx --replicas=3
+kubectl get pods -o wide
+vim scheduling/taint-toleration-pod.yaml
+kubectl create -f scheduling/taint-toleration-pod.yaml
+kubectl get pods -o wide
+kubectl taint nodes worker1.localdomain key2=value2:NoSchedule-
+kubectl get pods -o wide
+kubectl delete pod taint-nginx-56496f6c5-8hlr8
+kubectl get pods -o wide
+
+kubectl taint node worker2.localdomain key1=value1:NoSchedule
+kubectl label nodes worker2.localdomain disktype=ssd
+vim lab9/lab9-selector-pod.yaml
+kubectl create -f lab9/lab9-selector-pod.yaml
+kubectl get pods | grep lab9
+	-> pending
+kubectl taint node worker2.localdomain key1=value1:NoSchedule-
+kubectl get pods | grep lab9
+	-> running on worker2
+
+CORDON may also be used instead of tainting (kubectl cordon worker2.localdomain ; kubectl uncordon worker2.localdomain)
+
+!!!!!!!!!!!!!!!!! SECURITY !!!!!!!!!!!!!!!!!
+
+export client=$(grep client-cert ~/.kube/config | cut -d " " -f 6)
+echo $client
+export key=$(grep client-key-data ~/.kube/config | cut -d " " -f 6)
+echo $key
+export auth=$(grep certificate-authority-data ~/.kube/config | cut -d " " -f 6)
+echo $auth
+echo $client | base64 -d - > client.pem
+cat client.pem
+echo $key | base64 -d - > client-key.pem
+cat client-key.pem
+echo $auth | base64 -d - > ca.pem
+cat ca.pem
+kubectl config view | grep server
+curl --cert ./client.pem --key ./client-key.pem --cacert ./ca.pem https://172.16.0.110:6443/api/v1/pods
+
+kubectl explain pod.spec.securityContext
+kubectl explain pod.spec.containers.securityContext
+
+vim security/security-context.yaml
+kubectl create -f security/security-context.yaml
+kubectl get pods | grep secur
+kubectl exec -it security-context-demo-pod -- sh
+	ps -> user: 1000
+	ls -l -> 2000
+	id -> groups: 2000
+	exit
+
+kubectl create ns teachers
+kubectl create ns students
+kubectl config get-contexts
+kubectl get ns
+sudo useradd -G wheel anna
+sudo passwd anna
+cat /etc/passwd
+openssl genrsa -out anna.key 2048
+openssl req -new -key anna.key -out anna.csr -subj "/CN=anna/O=teachers"
+sudo openssl x509 -req -in anna.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out anna.crt -days 365
+kubectl config view | less
+kubectl config set-credentials anna --client-certificate=./anna.crt --client-key=./anna.key
+kubectl config view | less
+kubectl config set-context anna-context --cluster=kubernetes --namespace=teachers --user=anna
+kubectl config view | less
+kubectl --context=anna-context get pods -n teachers
+kubectl --context=anna-context get pods
+kubectl config get-contexts
+vim security/teachers-role.yaml
+kubectl create -f security/teachers-role.yaml
+vim security/teachers-rolebind.yaml
+kubectl create -f security/teachers-rolebind.yaml
+kubectl --context=anna-context get pods
+kubectl --context=anna-context get pods -n default
+kubectl --context=anna-context get deployments
+kubectl -n teachers describe role teachers-role | less
+kubectl --context=anna-context create deployment teachersnginx --image=nginx
+kubectl get all -n teachers
+kubectl --context=anna-context get deployments
+
+vim security/students-role.yaml
+vim security/students-rolebind.yaml
+kubectl apply -f security/students-role.yaml
+kubectl apply -f security/students-rolebind.yaml
+kubectl config view | less
+kubectl config set-context anna-students-context --cluster=kubernetes --namespace=students --user=anna
+kubectl --context=anna-students-context get pods
+kubectl --context=anna-students-context create deployment studentsnginx --image=nginx
+vim security/students-role.yaml
+kubectl create deployment studentsnginx --image=nginx -n students
+kubectl --context=anna-students-context get pods
+kubectl -n students describe role students-role
+
+sudo useradd -G wheel bob
+sudo passwd bob
+su - bob
+sudo cp /etc/kubernetes/admin.conf ~/.kube/config
+sudo chown bob:bob ~/.kube/config
+openssl genrsa -out bob.key 2048
+openssl req -new -key bob.key -out bob.csr -subj "/CN=bob/O=lab10"
+kubectl create ns lab10
+sudo openssl x509 -req -in bob.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out bob.crt -days 365
+kubectl config view | less
+kubectl config set-credentials bob --client-certificate=./bob.crt --client-key=./bob.key
+kubectl config view | less
+kubectl config set-context bob-context --cluster=kubernetes --namespace=lab10 --user=bob
+kubectl config view | less
+vim bob-role.yaml
+vim bob-rolebind.yaml
+vim bob-role.yaml
+kubectl apply -f bob-role.yaml
+kubectl apply -f bob-rolebind.yaml
+kubectl --context=bob-context create deployment bobnginx --image=nginx
+kubectl --context=bob-context get pods -o wide
+
+!!!!!!!!!!!!!!!!! NETWORKING !!!!!!!!!!!!!!!!!
+
+vim /etc/cni/net.d/10-calico.conflist
+https://github.com/containernetworking/cni
+
+kubectl get pods --all-namespaces -o wide | grep calico
+kubectl exec -n kube-system calico-node-w7psh -- ip route show
+kubectl exec -n kube-system calico-node-w7psh -- ip a show
+kubectl get svc -n kube-system
+sudo systemctl status firewalld
+kubectl get pods
+kubectl exec nginx-toleration-pod -- nslookup kubernetes
+kubectl get pods -n kube-system
+kubectl -n kube-system delete pod coredns-74ff55c5b-7tbx6
+kubectl -n kube-system delete pod coredns-74ff55c5b-8b6m7
+kubectl -n kube-system get pods
+kubectl get pods
+kubectl exec -it nginx-toleration-pod -- cat /etc/resolv.conf
+
+kubectl get pods -n kube-system --show-labels
+kubectl -n kube-system get all --selector name=weave-net
+kubectl delete daemonset -n kube-system weave-net
+sudo yum install -y wget
+wget https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+kubectl get pods -o wide
+vim calico.yaml
+	name: CALICO_IPV4POOL_CIDR
+	value: 192.168.0.0/16 -> 10.32.0.0/12
+kubectl apply -f calico.yaml
+reboot all nodes
+kubectl get nodes
+kubectl get pods -o wide 
+kubectl get pods -n kube-system -o wide | grep calico
+
+!!!!!!!!!!!!!!!!! MANAGING CLUSTER NODES !!!!!!!!!!!!!!!!!
+
+add a node to a cluster 
+	setup-docker.sh on new worker
+	setup-kubetools.sh on new worker
+	on control node:
+	su - 
+	kubeadm token list 2>dev/null
+	kubeadm token create 2>/dev/null			--> token
+	export TOKEN=<token>
+	echo $TOKEN
+	openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed ’s/^.*//‘ 											--> hash
+	export HASH=<hash>
+	echo $HASH
+	ssh <new_worker_ip> kubeadm join --token $TOKEN <control_node_ip>:6443 --discovery-token-ca-cert-hash sha256:$HASH
+
+reboot a node
+	kubectl cordon worker2
+	kubectl drain worker2 --force
+	reboot (/var/lib/kubelet/config.yaml and /etc/kubernetes/kubelet.conf)
+	kubectl uncordon worker2
+	
+tearing a cluster down
+	kubectl drain worker2 --delete-local-data --force --ignore-daemonsets
+	kubectl delete node worker2
+	kubeadm reset
+	rm $HOME/.kube/config
+	
+node status
+	su - 
+	systemctl statuys kubelet
+	ps aux | grep kubelet | grep yaml
+	cd /etc/kubernetes/manifests (kube-controller-manager.yaml)
+	kubeadm token -h
+	kubeadm config -h
+	kubeadm config view
+	kubectl -n kube-system get secrets
+	kubectl -n kube-system get secrets coredns-token-bws4h -o yaml
+
+static nodes
+	ssh root@worker3
+		ps aux | grep yaml
+		grep -i ’staticpodpath' /var/lib/kubelet/config.yaml
+		vim /etc/kubernetes/manifests/static-nginx-on-worker3.yaml
+		systemctl restart kubelet
+		exit
+	kubectl get pods -o wide | grep worker3
+	
+managing etcd database
+	sudo yum provides */etcdctl
+	sudo yum install -y etcd
+	etcdctl -h
+	ETCDCTL_API=3 etcdctl -h
+	ETCDCTL_API=3 etcdctl save -h
+	sudo ls -l /etc/kubernetes/pki
+	sudo ls -l /etc/kubernetes/pki/etcd
+	ps aux | grep etcd
+	sudo ETCDCTL_API=3 etcdctl snapshot save mysnapshot.db --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key
+	
+!!!!!!!!!!!!!!!!! LOGGING MONITORING AND TROUBLESHOOTING !!!!!!!!!!!!!!!!!
+
+git clone https://github.com/kubernetes-incubator/metrics-server.git
+less metrics-server/README.md
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl get pods -n kube-system | grep metrics
+kubectl -n kube-system edit deployments.apps metrics-server
+	spec.template.spec.containers.args
+		- --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+		- --kubelet-insecure-tls
+kubectl -n kube-system logs metrics-server-5b78d5f9c6-8vsj2
+kubectl top pods
+kubectl top pods --all-namespaces
+kubectl top node
+
+systemctl status kubelet
+sudo docker ps
+ps aux | grep api
+ps aux | grep kube
+ps aux | grep kubelet
+su -
+journalctl | grep kubelet
+journalctl | grep etcd
+cd /var/log/containers/
+less coredns-74ff55c5b-7bwrc_kube-system_coredns-046f50542770f60f2eb7bcd529f4b42bbb84e60dea19ed0419a21f4479a0014b.log
+ssh worker1
+	cd /var/log/containers/
+	less nginx-on-ssd_default_nginx-e38c1b82c64d9f86b03cf08a9f8cd2c08bef0cddd52fa507d1b52b7a2c27d0cd.log
+	journalctl | grep kubelet
+	exit
+
+kubectl get pods --show-labels
+kubectl get all --selector app=mynigx
+kubectl describe pod mynginx-pod -> events
+kubectl get pods -n kube-system -o wide
+kubectl -n kube-system delete pod weave-net-pod
+kubectl delete pod mynginx-pod 
+
+ps aux | grep kubelet | less
+ps aux | grep apiserver
+journalctl | grep kubelet
+kubectl -n kube-system get pods
+kubectl -n kube-system describe pod kube-apiserver-control.localdomain
+su -
+docker ps | grep api
+cd /var/log/containers/
+less kube-apiserver-control.localdomain_kube-system_kube-apiserver-1960a75765ed9386687a27aeb2b56397804a95f66d51e2096da466d9c9580ca2.log
+cd /etc/kubernetes/manifests/
+vim kube-apiserver.yaml
+
+
+
+
+
+
+
+
+
+
+
