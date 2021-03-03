@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lab6-pod
+spec:
+  volumes:
+    - name: lab6-volume
+      persistentVolumeClaim:
+        claimName: lab6-pvc
+  containers:
+    - name: lab6-httpd
+      image: httpd
+      volumeMounts:
+        - mountPath: "/var/www/"
+          name: lab6-volume

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: lab7-pod
+spec:
+  containers:
+  - name: lab7-sleep-container
+    image: busybox
+    command: ['sh', '-c', 'echo its running! && sleep 3600'] 
+  initContainers:
+  - name: init-lab7nginx
+    image: busybox
+    command: ['sh', '-c', 'until nslookup lab7nginx; do echo waiting for lab7nginx; sleep 2; done;'] 
+  - name: init-lab7mysql
+    image: busybox
+    command: ['sh', '-c', 'until nslookup lab7mysql; do echo waiting for lab7mysql; sleep 2; done;'] 

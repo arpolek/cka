@@ -1,0 +1,13 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: teachers-role-binding
+  namespace: teachers
+subjects:
+- kind: User
+  name: anna
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: teachers-role
+  apiGroup: ""
