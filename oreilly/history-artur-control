@@ -1,0 +1,1000 @@
+    4  ssh worker1 
+    5  ssh worker1
+    6  ssh worker2
+    7  ssh worker3
+    8  reboot 
+    9  su - 
+   10  kubeadm cluster-info
+   11  kubctl cluster-info
+   12  kubectl cluster-info
+   13  cd cka 
+   14  vim setup-docker.sh 
+   15  ./setup-docker.sh 
+   16  su - 
+   17  mkdir -p $HOME/.kube
+   18  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+   19  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+   20  ls -al ~/.kube/
+   21  vim ~/.kube/config 
+   22  kubectl cluster-info
+   23  kubectl get nodes 
+   24  kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+   25  kubectl get nodes 
+   26  kubectl get pods --all-namespaces
+   27  su - 
+   28  kubectl cluster-info 
+   29  kubectl get all --all-namespaces 
+   30  kubectl create deployment --image=nginx mynginx 
+   31  kubectl get all --all-namespaces 
+   32  kubectl logs -n default mynginx-5b686ccd46-cgs6g
+   33  kubectl get all --all-namespaces 
+   34  kubectl get all --all-namespaces -o wide 
+   35  kubectl get nodes 
+   36  kubectl get nodes -o wide 
+   37  ssh worker2 
+   38  kubectl get all --all-namespaces -o wide 
+   39  ssh worker1
+   40  ssh worker3
+   41  poweroff 
+   42  clear
+   43  kubectl get nodes 
+   44  kubectl get all --all-namespaces 
+   45  kubectl drain worker1.localdomain --delete-local-data --force --ignore-daemonsets
+   46  kubectl drain worker2.localdomain --delete-local-data --force --ignore-daemonsets
+   47  kubectl drain worker3.localdomain --delete-local-data --force --ignore-daemonsets
+   48  kubectl get nodes 
+   49  kubectl drain control.localdomain --delete-local-data --force --ignore-daemonsets
+   50  su - 
+   51  rm -rf $HOME/.kube/config file
+   52  kubectl get nodes 
+   53  kubectl cluster-info 
+   54  rm -rf /var/lib/kubelet/*
+   55  su - 
+   56  kubectl cluster-info 
+   57  exit
+   58  kubectl get nodes 
+   59  kubectl cluster-info 
+   60  kubectl get nodes 
+   61  reboot 
+   62  kubectl get nodes 
+   63  mkdir -p $HOME/.kube
+   64  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+   65  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+   66  ls -al .kube
+   67  kubectl cluster-info
+   68  kubectl get nodes 
+   69  su - 
+   70  kubectl get nodes 
+   71  kubectl apply -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml
+   72  kubectl get nodes 
+   73  kubectl get all --all-namespaces 
+   74  kubectl get nodes 
+   75  cd cka 
+   76  kubectl create deployment --image=nginx mynginx 
+   77  kubectl get all 
+   78  kubectl create -f busybox.yaml 
+   79  kubectl get all 
+   80  clear
+   81  kubectl get all 
+   82  kubectl get all -o wide 
+   83  kubectl get all -o wide --all-namespaces
+   84  vim init1.yaml 
+   85  kubectl create -f init1.yaml 
+   86  kubectl get all 
+   87  kubectl expose -h 
+   88  kubectl get all 
+   89  kubectl expose deployment mynginx --port=80 --name=myservice ; kubectl get all 
+   90  kubectl get pods 
+   91  kubectl get svc
+   92  kubectl get pods 
+   93  kubectl get svc 
+   94  nslookup myservice 
+   95  kubectl get svc 
+   96  kubectl get pods 
+   97  vim init-container.yaml 
+   98  kubectl create -f init-container.yaml 
+   99  kubectl get pods 
+  100  vim init-container.yaml 
+  101  kubectl get all 
+  102  kubectl get all --all-namespaces 
+  103  kubectl get all 
+  104  kubectl get pods 
+  105  vim stateful.yaml 
+  106  history | less 
+  107  vim daemonset-fluentd.yaml 
+  108  kubectl get daemonsets.apps -n kube-system 
+  109  kubectl get nodes 
+  110  kubectl create -f daemonset-fluentd.yaml 
+  111  kubectl get daemonsets.apps -n kube-system 
+  112  kubectl get pods -n kube-system 
+  113  kubectl get pods -n kube-system -o wide 
+  114  kubectl get pods -n kube-system -o wide | grep control
+  115  kubectl get pods -n kube-system -o wide | grep 'fluent.*control'
+  116  kubectl get pods -n kube-system
+  117  vim daemonset-fluentd.yaml 
+  118  vim stateful.yaml 
+  119  ll | grep nginx 
+  120  cp daemonset-fluentd.yaml daemonset-nginx.yaml 
+  121  vim daemonset-nginx.yaml 
+  122  vim stateful.yaml 
+  123  vim daemonset-nginx.yaml 
+  124  kubectl create -f daemonset-nginx.yaml 
+  125  kubectl get all 
+  126  kubectl get pods -o wide 
+  127  ssh worker1 
+  128  ls -l | grep volume 
+  129  ls -l 
+  130  ssh worker3 
+  131  ssh worker2 
+  132  ssh worker1 
+  133  sudo poweroff 
+  134  clear
+  135  kubectl get nodes 
+  136  kubectl get all
+  137  cd cka 
+  138  ls -ltr 
+  139  ls -l
+  140  mkdir deployments
+  141  mv demodeployment* deployments/
+  142  mkdir init-containers
+  143  mv init1.yaml init-container.yaml init-containers/
+  144  ls init-containers
+  145  ls init-containers/
+  146  mkdir daemonsets
+  147  mv daemonset-fluentd.yaml daemonset-nginx.yaml daemonsets/
+  148  less demo1.yaml
+  149  less rolling.yaml
+  150  ll 
+  151  mkdir storage 
+  152  cd storage 
+  153  vim shared-volume.yaml 
+  154  cd .. 
+  155  kubectl create -f storage/shared-volume.yaml 
+  156  vim storage/shared-volume.yaml 
+  157  kubectl create -f storage/shared-volume.yaml 
+  158  vim storage/shared-volume.yaml 
+  159  kubectl create -f storage/shared-volume.yaml 
+  160  kubectl get pods 
+  161  kubectl exec -it sharedvolume -- /bin/bash
+  162  kubectl exec -it sharedvolume -c centos2 -- /bin/bash
+  163  kubectl explain pods.spec.volumes
+  164  vim storage/pv.yaml 
+  165  kubectl create -f storage/pv.yaml 
+  166  kubectl explain pods.spec.volumes | less
+  167  vim storage/pv.yaml 
+  168  kubectl create -f storage/pv.yaml 
+  169  kubectl get pv pv-volume 
+  170  kubectl explain pv | less 
+  171  kubectl explain pv.spec.storageClass | less 
+  172  kubectl explain pv.spec | less 
+  173  kubectl explain pv.spec.storageClassName | less 
+  174  ls | grep nfs 
+  175  vim storage/pv-nfs.yaml 
+  176  kubectl create -f storage/pv-nfs.yaml 
+  177  kubectl get pv 
+  178  kubectl explain pv.spec | less 
+  179  history | less 
+  180  mv pvc.yaml storage/
+  181  vim storage/pvc.yaml 
+  182  kubectl get pv 
+  183  kubectl create -f storage/pvc.yaml 
+  184  kubectl get pvc 
+  185  kubectl get pv 
+  186  ls | grep nfs 
+  187  vim storage/nfs-pvc.yaml 
+  188  kubectl create -f storage/nfs-pvc.yaml 
+  189  vim storage/nfs-pvc.yaml 
+  190  vim storage/pv.yaml 
+  191  vim storage/nfs-pvc.yaml 
+  192  kubectl create -f storage/nfs-pvc.yaml 
+  193  kubectl get pv
+  194  kubectl get pvc
+  195  history | less 
+  196  vim pv-pvc-pod.yaml
+  197  mv pv-pvc-pod.yaml storage/
+  198  vim storage/pv-pvc-pod.yaml 
+  199  kubectl create -f storage/pv-pvc-pod.yaml 
+  200  vim storage/pv-pvc-pod.yaml 
+  201  kubectl create -f storage/pv-pvc-pod.yaml 
+  202  vim storage/pv-pvc-pod.yaml 
+  203  kubectl create -f storage/pv-pvc-pod.yaml 
+  204  vim storage/pv-pvc-pod.yaml 
+  205  kubectl create -f storage/pv-pvc-pod.yaml 
+  206  vim storage/pv-pvc-pod.yaml 
+  207  kubectl create -f storage/pv-pvc-pod.yaml 
+  208  vim storage/pv-pvc-pod.yaml 
+  209  kubectl create ns storage-lab
+  210  vim storage/pv-pvc-pod.yaml 
+  211  kubectl create -f storage/pv-pvc-pod.yaml 
+  212  kubectl get all -n storage-lab 
+  213  kubectl explain pod/local-pv-pod1
+  214  kubectl explain pod/local-pv-pod1 -n storage-lab 
+  215  kubectl get all -n storage-lab 
+  216  kubectl describe pod/local-pv-pod1 -n storage-lab 
+  217  ls -l storage 
+  218  kubectl get pv --all-namespaces
+  219  history | less 
+  220  uptime 
+  221  kubectl get all
+  222  kubectl get pv
+  223  kubectl get pvc
+  224  kubectl delete pv local-pv-volume1
+  225  kubectl get pv
+  226  kubectl get pvc 
+  227  kubectl delete pvc local-pv-claim1
+  228  kubectl get pv pvc 
+  229  kubectl get pv
+  230  kubectl get pvc
+  231  kubectl get pvc -n storage-lab 
+  232  kubectl delete pvc local-pv-claim -n storage-lab 
+  233  kubectl get pv --all-namespaces
+  234  kubectl delete pv local-pv-volume111 -n storage-lab 
+  235  kubectl get pv --all-namespaces
+  236  kubectl get pvc --all-namespaces
+  237  kubectl get pods --all-namespaces
+  238  kubectl delete pod local-pv-pod1 -n storage-lab 
+  239  kubectl delete pod local-pv-pod
+  240  kubectl delete pod local-pv-pod1
+  241  kubectl get pv --all-namespaces
+  242  kubectl get pvc --all-namespaces
+  243  kubectl get pods 
+  244  kubectl get all -n storage-lab 
+  245  kubectl describe pod sharedvolume 
+  246  kubectl exec -h
+  247  kubectl exec sharedvolume --bin/bash
+  248  kubectl exec sharedvolume -- bin/bash
+  249  ls
+  250  kubectl exec -it sharedvolume -- bin/bash
+  251  kubectl delete pod sharedvolume 
+  252  kubectl get all 
+  253  kubectl delete pod init-demo
+  254  kubectl delete pod initpod
+  255  kubectl delete daemonsets.apps nginx-daemonset 
+  256  kubectl get pods 
+  257  kubectl describe deployments.apps mynginx 
+  258  kubectl get deployments.apps mynginx -o yaml 
+  259  kubectl get pods busybox2 -o yaml | less 
+  260  kubectl describe pods busybox2 
+  261  kubectl get pods 
+  262  kubectl get pods -o wide 
+  263  kubectl describe pod mynginx-5b686ccd46-jgvj9
+  264  kubectl describe pod busybox2 | less 
+  265  kubectl get all --all-namespaces
+  266  kubectl get pv 
+  267  kubectl get pvc
+  268  kubectl delete pvc local-pv-claim
+  269  kubectl delete pvc pv-nfs
+  270  kubectl delete pvc nfs-pv-claim
+  271  kubectl delete pvc pv-claim 
+  272  kubectl get pvc 
+  273  kubectl get pv
+  274  kubectl delete pv local-pv-volume pv-nfs pv-volume
+  275  kubectl get pv 
+  276  kubectl get pvc
+  277  vim storage/pv-pvc-pod.yaml 
+  278  kubectl create -f storage/pv-pvc-pod.yaml 
+  279  kubectl get pv
+  280  kubectl get pvc
+  281  vim storage/pv-pvc-pod.yaml 
+  282  kubectl describe pod local-pv-pod1
+  283  kubectl explain pv | less 
+  284  kubectl explain pv.spec | less 
+  285  vim storage/pv-pvc-pod.yaml 
+  286  kubectl explain pv.spec.storageClassName | less 
+  287  ls -l storage
+  288  vim nfs-pvc.yaml
+  289  vim storage/nfs-pvc.yaml
+  290  vim storage/pv-nfs.yaml
+  291  vim storage/pv.yaml
+  292  vim storage/shared-volume.yaml
+  293  kubectl explain pods.spec.volumes
+  294  kubectl explain pv.spec.storageClassName
+  295  ll | grep config 
+  296  mv nginx-custom-config.conf storage/
+  297  vim storage/nginx-custom-config.conf 
+  298  kubectl create cm nginx-cm --form-file storage/nginx-custom-config.conf 
+  299  kubectl create cm nginx-cm --from-file storage/nginx-custom-config.conf 
+  300  kubectl get cm nginx-cm -o yaml 
+  301  vim nginx-cm.yml 
+  302  mv nginx-cm.yml storage/nginx-cm.yaml 
+  303  kubectl create -f storage/nginx-cm.yaml 
+  304  kubectl exec -it nginx-cm /bin/bash 
+  305  vim storage/nginx-custom-config.conf
+  306  kubectl exec -it nginx-cm /bin/bash 
+  307  kubectl create cm myconfig --from-literal=color=red
+  308  kubectl get cm myconfig 
+  309  kubectl get cm myconfig -o yaml 
+  310  mv test-cm-pod.yaml storage/
+  311  vim storage/test-cm-pod.yaml 
+  312  kubectl create -f storage/test-cm-pod.yaml 
+  313  kubectl get pod test-pod -o yaml 
+  314  kubectl describe pod test-pod 
+  315  kubectl exec -it test-pod 
+  316  kubectl exec -it test-pod -- sh 
+  317  kubectl exec -it test-pod -- /bin/bash
+  318  history | less 
+  319  vim storage/nginx-cm.yaml
+  320  vim storage/nginx-custom-config.conf
+  321  kubectl create secret generic secretstuff --from-literal=password=dupa123
+  322  kubectl delete secrets secretstuff 
+  323  kubectl create secret generic secretstuff --from-literal=password=dupa123 --from-literal=user=artur
+  324  kubectl get secret secretstuff -o yaml 
+  325  ls | grep secret 
+  326  vim secretbox.yaml 
+  327  vim storage/secret-pod.yaml 
+  328  kubectl create -f storage/secret-pod.yaml 
+  329  vim storage/secret-pod.yaml 
+  330  kubectl create -f storage/secret-pod.yaml 
+  331  vim storage/secret-pod.yaml 
+  332  kubectl create -f storage/secret-pod.yaml 
+  333  kubectl describe pod secretbox-pod | less 
+  334  kubectl exec -it secretbox-pod -- /bin/bash 
+  335  kubectl exec -it secretbox-pod /bin/bash 
+  336  kubectl exec -it secretbox-pod /bin/sh 
+  337  kubectl create secret generic mysql --from-literal=password=dupa123
+  338  kubectl get secrets mysql -o yaml 
+  339  ls l | grep var 
+  340  ls -l | grep var 
+  341  vim storage/secret-as-var-pod.yaml
+  342  kubectl create -f storage/secret-as-var-pod.yaml 
+  343  kubectl exec it mysql-pod env 
+  344  kubectl exec -it mysql-pod env 
+  345  kubectl exec -it mysql-pod -- bin/sh
+  346  kubectl get secrets mysql -o yaml 
+  347  vim storage/secret-as-var-pod.yaml 
+  348  kubectl get pod mysql-pod -o yaml 
+  349  kubectl describe pod mysql-pod
+  350  kubectl create ns lab6
+  351  ll 
+  352  cd storage
+  353  ll 
+  354  mkdir ../lab6 
+  355  cp pv-pvc-pod.yaml ../lab6/
+  356  cd .. 
+  357  vim lab6/pv-pvc-pod.yaml 
+  358  kubectl get ns 
+  359  vim lab6/pv-pvc-pod.yaml 
+  360  cd lab6
+  361  cp pv-pvc-pod.yaml lab6-pv.yaml
+  362  mv pv-pvc-pod.yaml template.yaml 
+  363  ls -l 
+  364  vim lab6-pv.yaml 
+  365  cp template.yaml lab6-pvc.yaml
+  366  rm -f template.yaml 
+  367  vim lab6-pvc.yaml 
+  368  ll .. 
+  369  grep -i 'deployment' ../*
+  370  grep -i 'deployment' ../*yaml
+  371  ll .. | grep '^d' 
+  372  vim ../deployments/demodeployment.yaml
+  373  ll 
+  374  kubectl get all --all-namespaces 
+  375  kubectl get all -n lab6
+  376  ssh worker1 
+  377  ssh worker2
+  378  ssh worker3
+  379  poweroff 
+  380  cd cka 
+  381  cd lab6/
+  382  ls
+  383  cat lab6-pv*
+  384  ssh worker1 
+  385  ssh worker2 
+  386  ssh worker1 
+  387  ssh worker3 
+  388  cat lab6-pv.yaml 
+  389  kubectl create -f lab6-pv.yaml 
+  390  kubectl get all -n lab6 
+  391  kubectl get pv -n lab6 
+  392  kubectl get pv
+  393  kubectl get pvc 
+  394  kubectl get pods 
+  395  kubectl delete pv lab6-pv
+  396  kubectl get pod local-pv-pod1
+  397  kubectl get pod local-pv-pod1 -o yaml 
+  398  kubectl describe pod local-pv-pod1 | less 
+  399  kubectl delete pod local-pv-pod1 
+  400  kubectl get pv 
+  401  kubectl delete pv local-pv-volume
+  402  kubectl get pvc 
+  403  kubectl delete local-pv-claim
+  404  kubectl delete pvc local-pv-claim
+  405  kubect lget pv 
+  406  kubectl get pv 
+  407  kubectl get pvc 
+  408  kubectl get pods 
+  409  vim lab6-pv.yaml 
+  410  kubectl create -f lab6-pv.yaml 
+  411  kubectl get pv 
+  412  vim lab6-pvc.yaml 
+  413  kubectl create -f lab6-pvc.yaml 
+  414  kubectl get pvc 
+  415  kubectl get pv
+  416  vim lab6-pvc.yaml 
+  417  vim ../deployments/demodeployment.yaml 
+  418  cp ../deployments/demodeployment.yaml lab6-deployment.yaml 
+  419  vim lab6-deployment.yaml 
+  420  kubectl create -f lab6-deployment.yaml 
+  421  vim lab6-deployment.yaml 
+  422  vim lab6-pv.yaml 
+  423  kubectl create -f lab6-deployment.yaml 
+  424  vim lab6-deployment.yaml 
+  425  cat lab6-deployment.yaml 
+  426  vim lab6-deployment.yaml 
+  427  kubectl create -f lab6-deployment.yaml 
+  428  kubectl get pod lab6-deployment-565df59fd7-bmk77 
+  429  kubectl get all 
+  430  kubectl delete deployments.apps lab6-deployment 
+  431  kubectl get all 
+  432  kubectl get pv 
+  433  kubectl get pvc 
+  434  vim lab6-deployment.yaml 
+  435  kubectl create -f lab6-deployment.yaml 
+  436  kubectl get all 
+  437  kubectl delete deployments.apps lab6-deployment 
+  438  kubectl get all 
+  439  vim lab6-deployment.yaml 
+  440  vim lab6-pv.yaml 
+  441  vim lab6-pvc.yaml 
+  442  ls
+  443  kubectl get all 
+  444  kubectl get ns 
+  445  kubectl get all -n lab6 
+  446  kubectl delete ns lab6 
+  447  kubectl get pv 
+  448  kubectl get pvc
+  449  rm lab6-deployment.yaml 
+  450  vim lab6-pod.yaml 
+  451  cat lab6-p*
+  452  kubectl create -f lab6-pod.yaml 
+  453  kubectl get all 
+  454  kubectl exec -it pod lab6-pod -- /bin/bash 
+  455  kubectl exec -it lab6-pod -- /bin/bash 
+  456  kubectl delete pod lab6-pod 
+  457  kubectl get pods 
+  458  kubectl delete pv lab6-pv 
+  459  kubectl delete pvc lab6-pvc 
+  460  kubectl get all 
+  461  vim lab6-pv.yaml 
+  462  kubectl create -f lab6-pv.yaml 
+  463  vim lab6-pvc.yaml 
+  464  kubectl create -f lab6-pvc.yaml 
+  465  vim lab6-pod.yaml 
+  466  kubectl create -f lab6-pod.yaml 
+  467  kubectl get all 
+  468  kubectl get pv 
+  469  kubectl get pvc
+  470  kubectl exec -it lab6-pod -- /bin/bash 
+  471  kubectl describe pod lab6-pod 
+  472  kubectl get pod lab6-pod -o wide 
+  473  vim lab6-pv.yaml 
+  474  ssh worker2 
+  475  vim lab6-pv.yaml 
+  476  ssh worker1 
+  477  ls
+  478  cd .. 
+  479  ls -l 
+  480  mkdir pod-networking 
+  481  ll | grep demo 
+  482  vim demo1.yaml 
+  483  vim networkpolicy-example.yaml 
+  484  grep 'net-demo' *
+  485  vim pod-networking/net-demo.yaml 
+  486  kubectl get all 
+  487  kubectl delete pod mysql-pod 
+  488  kubectl get secret
+  489  kubectl delete secret mysql
+  490  kubectl delete secret secretstuff 
+  491  kubectl get cm 
+  492  kubectl get all 
+  493  kubectl delete pod nginx-cm 
+  494  kubectl delete pod secretbox-pod 
+  495  kubectl get pod
+  496  kubectl get pv 
+  497  kubectl get pvc 
+  498  kubectl create -f pod-networking/net-demo.yaml 
+  499  kubectl get pods 
+  500  kubectl exec net-demo -c busynet1 ip a s  
+  501  kubectl exec net-demo -c busynet1 -- ip a s  
+  502  kubectl exec net-demo -c busynet2 -- ip a s  
+  503  kubectl get pod net-demo -o wide 
+  504  ssh root@worker1
+  505  history | less 
+  506  kubectl get all -o wide 
+  507  kubectl get pods -o wide 
+  508  kubectl exec busybox2 ip a s 
+  509  kubectl exec lab6-pod ip a s 
+  510  kubectl exec lab6-pod -- ip a s 
+  511  kubectl exec net-demo -- ip a s 
+  512  history | less 
+  513  kubectl get svc --all-namespaces 
+  514  ll
+  515  vim busybox-svc.yaml
+  516  cd pod-networking/
+  517  ll 
+  518  vim svc-net.yaml 
+  519  kubectl create -f net-demo.yaml 
+  520  kubectl get pods 
+  521  vim svc-net.yaml 
+  522  kubectl create -f svc-net.yaml 
+  523  kubectl get pods 
+  524  kubectl delete pod net-pod
+  525  vim svc-net.yaml 
+  526  kubectl create -f svc-net.yaml 
+  527  kubectl expose -h
+  528  vim svc.yaml 
+  529  kubectl get pods 
+  530  kubectl expose pod net-pod --type=NodePort --port=3245
+  531  kubectl get svc 
+  532  kubectl delete svc net-pod
+  533  kubectl expose pod net-pod --type=NodePort --port=22
+  534  kubectl get svc 
+  535  history | less 
+  536  ll .. 
+  537  ll .. | grep ingress 
+  538  vim ../ingress-rbac.yaml
+  539  vim ../nginxsvc-ingress.yaml
+  540  vim ingress.yaml 
+  541  ssh worker3
+  542  ssh worker2
+  543  ssh worker1
+  544  poweroff 
+  545  cd cka/pod-networking/
+  546  ll
+  547  vim net-demo.yaml 
+  548  mv net-demo.yaml net-demo-pod.yaml 
+  549  mv svc-net.yaml svc-net-pod.yaml 
+  550  vim svc.yaml 
+  551  kubectl get pods 
+  552  kubectl delete pod busybox2 
+  553  kubectl get all 
+  554  vim net-demo-pod.yaml 
+  555  vim svc-net-pod.yaml 
+  556  vim ingress.yaml 
+  557  kubectl create ingress -h 
+  558  vim ingress.yaml 
+  559  ssh worker1
+  560  ssh worker2 
+  561  ssh worker3
+  562  poweroff 
+  563  cd cka/pod-networking/
+  564  vim ingress.yaml 
+  565  kubectl get svc 
+  566  kubectl get pod 
+  567  vim ingress.yaml 
+  568  kubectl create -f ingress.yaml 
+  569  kubectl describe ingresses.networking.k8s.io minimal-ingress 
+  570  history | less 
+  571  cd .. 
+  572  mkdir lab7 
+  573  cd lab7 
+  574  kuubectl get all 
+  575  kubectl get all 
+  576  ll .. | grep init 
+  577  ll .. 
+  578  ll ../init-containers/
+  579  vim ../init-containers/init-container.yaml 
+  580  vim ../init-containers/init1.yaml 
+  581  cp ../init-containers/init1.yaml ./lab7-pod.yaml
+  582  vim ../pod-networking/net-demo-pod.yaml 
+  583  vim ../pod-networking/svc.yaml 
+  584  vim ../pod-networking/svc-net-pod.yaml 
+  585  cp ../pod-networking/svc.yaml ./lab7-svc.yaml
+  586  ll
+  587  kubectl get all 
+  588  kubectl delete pod/lab6-pod
+  589  kubectl get pv 
+  590  kubectl get pvc 
+  591  ll ../lab6
+  592  kubectl create -f ../lab6/lab6-pod.yaml 
+  593  kubectl get pods 
+  594  ll
+  595  vim lab7-pod.yaml 
+  596  vim lab7-svc.yaml 
+  597  vim lab7-pod.yaml 
+  598  kubectl create -f lab7-pod.yaml 
+  599  kubectl get pods 
+  600  kubectl create -f lab7-svc.yaml 
+  601  kubectl get svc 
+  602  kubectl get pods 
+  603  vim lab7-svc.yaml 
+  604  vim lab7-pod.yaml 
+  605  ll
+  606  cd .. 
+  607  ll | grep crd 
+  608  ll | grep '^d'
+  609  mkdir custom-resource-definition
+  610  mv crd-object.yaml custom-resource-definition/
+  611  vim custom-resource-definition/crd-object.yaml 
+  612  kubectl create -f custom-resource-definition/crd-object.yaml 
+  613  vim custom-resource-definition/crd-object.yaml 
+  614  kubectl create -f custom-resource-definition/crd-object.yaml 
+  615  vim custom-resource-definition/crd-object.yaml 
+  616  kubectl create -f custom-resource-definition/crd-object.yaml 
+  617  vim custom-resource-definition/crd-object.yaml 
+  618  kubectl create -f custom-resource-definition/crd-object.yaml 
+  619  vim custom-resource-definition/crd-object.yaml 
+  620  kubectl create -f custom-resource-definition/crd-object.yaml 
+  621  kubectl get crd 
+  622  ll | grep bakcup 
+  623  ll | grep crd 
+  624  mv crd-backup.yaml custom-resource-definition/
+  625  vim custom-resource-definition/crd-backup.yaml 
+  626  kubectl create -f custom-resource-definition/crd-backup.yaml 
+  627  vim custom-resource-definition/crd-backup.yaml 
+  628  kubectl explain pod.spec
+  629  kubectl explain backup
+  630  kubectl explain backup.spec
+  631  vim custom-resource-definition/crd-backup.yaml 
+  632  kubectl create -f custom-resource-definition/crd-backup.yaml 
+  633  kubectl get backups.stable.linux.com 
+  634  kubectl get backups.stable.linux.com mybackup -o yaml 
+  635  history | less 
+  636  kubectl get nodes 
+  637  kubectl label nodes -h 
+  638  kubectl explain pod.spec.nodeSelector 
+  639  kubectl get nodes --all-selectors 
+  640  kubectl get nodes --show-labels 
+  641  kubectl label nodes worker1.localdomain disktype=ssd
+  642  kubectl get nodes --show-labels 
+  643  ll | grep selector
+  644  mkdir scheduling 
+  645  mv selector-pod.yaml scheduling/
+  646  vim scheduling/selector-pod.yaml 
+  647  kubectl apply -h 
+  648  kubectl apply -f scheduling/selector-pod.yaml 
+  649  kubectl get pods -o wide 
+  650  kubectl describe pod nginx-on-ssd | less 
+  651  history | less 
+  652  kubectl explain pod.spec.affinity 
+  653  kubectl explain pod.spec.affinity.podAffinity 
+  654  kubectl explain pod.spec.affinity.podAntiAffinity 
+  655  kubectl explain pod.spec.affinity.podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecution
+  656  mv pod-with-node-affinity.yaml scheduling/
+  657  vim scheduling/pod-with-node-affinity.yaml 
+  658  kubectl create -f scheduling/pod-with-node-affinity.yaml 
+  659  kubectl get pods 
+  660  echo "state pending"
+  661  kubectl describe pod-with-pod-affinity.yaml | less
+  662  kubectl describe pod-with-pod-affinity.yaml 
+  663  kubectl describe pod with-pod-affinity | less 
+  664  kubectl describe pod with-node-affinity 
+  665  echo "Warning  FailedScheduling  2m13s  default-scheduler  0/4 nodes are available: 1 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn't tolerate, 3 node(s) didn't match Pod's node affinity.
+  666    Warning  FailedScheduling  2m13s  default-scheduler  0/4 nodes are available: 1 node(s) had taint {node-role.kubernetes.io/master: }, that the pod didn't tolerate, 3 node(s) didn't match Pod's node affinity."
+  667  kubectl delete  -f scheduling/pod-with-node-affinity.yaml 
+  668  kubectl get pods 
+  669  vim scheduling/pod-with-node-affinity.yaml 
+  670  echo "required paragraph removed"
+  671  kubectl create -f scheduling/pod-with-node-affinity.yaml 
+  672  kubectl get pods 
+  673  kubectl get pods -o wide | grep aff 
+  674  kubectl describe pod with-node-affinity 
+  675  ll scheduling/
+  676  kubectl get pods 
+  677  ll | grep affinity 
+  678  mv pod-with-pod-affinity.yaml scheduling/
+  679  vim scheduling/pod-with-pod-affinity.yaml
+  680  kubectl create -f scheduling/pod-with-pod-affinity.yaml 
+  681  kubectl describe pod with-pod-affinity 
+  682  kubectl get pods 
+  683  history | less 
+  684  vim scheduling/pod-with-pod-affinity.yaml
+  685  vim scheduling/selector-pod.yaml 
+  686  vim scheduling/pod-with-node-affinity.yaml 
+  687  mv redis-with-pod-affinity.yaml scheduling/
+  688  vim scheduling/redis-with-pod-affinity.yaml 
+  689  kubectl create -f scheduling/redis-with-pod-affinity.yaml 
+  690  kubectl get deployments.apps redis-cache 
+  691  kubectl get pods 
+  692  kubectl get pods -o wide 
+  693  history | less 
+  694  mv webserver-with-pod-affinity.yaml scheduling/
+  695  vim scheduling/webserver-with-pod-affinity.yaml 
+  696  kubectl create -f scheduling/webserver-with-pod-affinity.yaml 
+  697  kubectl get deployments 
+  698  kubectl describe pod web-server-7886dfdc59-4gpkk | less 
+  699  kubectl get deployments 
+  700  kubectl get pods 
+  701  kubectl get pods -o wide 
+  702  kubectl delete -f scheduling/webserver-with-pod-affinity.yaml 
+  703  kubectl delete -f scheduling/redis-with-pod-affinity.yaml 
+  704  kubectl get deployments 
+  705  kubectl get pods 
+  706  vim scheduling/redis-with-pod-affinity.yaml 
+  707  kubectl create -f scheduling/redis-with-pod-affinity.yaml 
+  708  kubectl get pods 
+  709  kubectl get pods -o wide 
+  710  kubectl create -f scheduling/webserver-with-pod-affinity.yaml 
+  711  kubectl get deployments 
+  712  kubectl get pods 
+  713  kubectl get pods -o wide 
+  714  vim scheduling/redis-with-pod-affinity.yaml 
+  715  vim scheduling/webserver-with-pod-affinity.yaml 
+  716  kubectl describe pod with-pod-affinity | less 
+  717  ll scheduling/
+  718  vim scheduling/pod-with-pod-affinity.yaml
+  719  kubectl delete -f scheduling/webserver-with-pod-affinity.yaml 
+  720  kubectl delete -f scheduling/redis-with-pod-affinity.yaml 
+  721  vim scheduling/redis-with-pod-affinity.yaml 
+  722  history | less 
+  723  ll | grep tain
+  724  ll | grep tole
+  725  kubectl taint -h | less 
+  726  kubectl taint nodes worker1.localdomain key1=value1:NoSchedule
+  727  kubectl taint nodes worker1.localdomain key1=value1:NoSchedule- 
+  728  kubectl taint nodes worker1.localdomain key2=value2:NoSchedule
+  729  kubectl describe nodes worker1.localdomain 
+  730  kubectl describe nodes worker1.localdomain | less 
+  731  kubectl create deployment taint-nginx --image=nginx 
+  732  kubectl get pods 
+  733  kubectl scale deployment taint-nginx --replicas=3
+  734  kubectl get pods -o wide 
+  735  mv taint-toleration.yaml scheduling/
+  736  vim scheduling/taint-toleration.yaml 
+  737  mv scheduling/taint-toleration.yaml scheduling/taint-toleration-pod.yaml 
+  738  kubectl create -f scheduling/taint-toleration-pod.yaml 
+  739  kubectl get pods -o wide 
+  740  kubectl taint nodes worker1.localdomain key2=value2:NoSchedule-
+  741  kubectl get pods -o wide 
+  742  kubectl delete pod taint-nginx-56496f6c5-8hlr8
+  743  kubectl get pods -o wide 
+  744  history | less 
+  745  ssh worker3 
+  746  ssh worker2
+  747  ssh worker1 
+  748  poweroff 
+  749  uptime
+  750  kubectl get pods 
+  751  kubectl get all --all-namespaces 
+  752  vim custom-resource-definition/crd-backup.yaml
+  753  cd cka 
+  754  vim custom-resource-definition/crd-backup.yaml
+  755  vim scheduling/selector-pod.yaml
+  756  vim scheduling/pod-with-node-affinity.yaml
+  757  vim scheduling/redis-with-pod-affinity.yaml
+  758  vim scheduling/taint-toleration-pod.yaml
+  759  vim scheduling/pod-with-pod-affinity.yaml
+  760  vim scheduling/pod-with-node-affinity.yaml
+  761  ll | grep resourc
+  762  ll | grep front
+  763  vim scheduling/frontend-resources.yaml 
+  764  ll scheduling/
+  765  vim pod-with-node-affinity.yaml
+  766  vim cka/pod-with-node-affinity.yaml
+  767  vim scheduling/pod-with-node-affinity.yaml
+  768  kubectl taint node worker2.localdomain key1=value1:NoSchedule 
+  769  kubectl get nodes -o wide 
+  770  kubectl get nodes --show-labels 
+  771  kubectl describe nodes worker2.localdomain | less 
+  772  kubectl get pods --all-namespaces 
+  773  kubectl get pods --all-namespaces -o wide 
+  774  kubectl label nodes worker2.localdomain disktype=ssd 
+  775  vim scheduling/taint-toleration-pod.yaml 
+  776  vim scheduling/pod-with-node-affinity.yaml 
+  777  grep 'disktype' scheduling/*
+  778  vim scheduling/selector-pod.yaml
+  779  kubectl get pods -o wide | grep ssd 
+  780  kubectl delete -f scheduling/selector-pod.yaml 
+  781  kubectl get pods -o wide | grep ssd 
+  782  kubectl create -f scheduling/selector-pod.yaml 
+  783  kubectl get pods -o wide | grep ssd 
+  784  kubectl explain pod.spec.affinity | less 
+  785  kubectl explain pod.spec.affinity.nodeAffinity | less 
+  786  kubectl explain pod.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution | less 
+  787  kubectl explain pod.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms | less 
+  788  kubectl explain pod.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.matchExpressions | less 
+  789  mkdir lab9 
+  790  cp scheduling/pod-with-node-affinity.yaml lab9/
+  791  mv lab9/pod-with-node-affinity.yaml lab9/lab9-pod-with-node-affinity.yaml 
+  792  vim lab9/lab9-pod-with-node-affinity.yaml 
+  793  kubectl explain pod.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms.matchExpressions.operator | less 
+  794  vim lab9/lab9-pod-with-node-affinity.yaml 
+  795  kubectl create -f lab9/lab9-pod-with-node-affinity.yaml 
+  796  vim lab9/lab9-pod-with-node-affinity.yaml 
+  797  kubectl create -f lab9/lab9-pod-with-node-affinity.yaml 
+  798  kubectl get pods -o wide | grep lab9 
+  799  kubectl describe pod lab9-with-node-affinity | less 
+  800  kubectl get nodes worker2.localdomain | less 
+  801  kubectl describe nodes worker2.localdomain | less 
+  802  history | less 
+  803  kubectl label nodes worker2.localdomain key1:value1=NoSchedule-
+  804  kubectl label nodes worker2.localdomain key1=value1:NoSchedule-
+  805  kubectl taint nodes worker2.localdomain key1=value1:NoSchedule-
+  806  kubectl describe nodes worker2.localdomain | less 
+  807  kubectl get nodes -o wide 
+  808  kubectl get nodes --show-labels 
+  809  kubectl get nodes --show-labels | grep ssd 
+  810  kubectl label nodes worker1.localdomain disktype=ssd-
+  811  kubectl label nodes worker1.localdomain disktype-
+  812  kubectl get nodes --show-labels | grep ssd 
+  813  kubectl get pods | grep lab9 
+  814  kubectl delete -f lab9/lab9-pod-with-node-affinity.yaml 
+  815  kubectl get pods | grep lab9 
+  816  rm lab9/lab9-pod-with-node-affinity.yaml 
+  817  ll scheduling/
+  818  cp scheduling/selector-pod.yaml lab9/lab9-selector-pod.yaml 
+  819  kubectl taint node worker2.localdomain key1=value1:NoSchedule 
+  820  kubectl get pods -o wide 
+  821  kubectl label nodes worker2.localdomain disktype=ssd 
+  822  vim lab9/lab9-selector-pod.yaml 
+  823  kubectl create -f lab9/lab9-selector-pod.yaml 
+  824  kubectl get pods | grep lab9
+  825  kubectl taint node worker2.localdomain key1=value1:NoSchedule-
+  826  kubectl get pods | grep lab9
+  827  kubectl get pods -o wide  | grep lab9
+  828  ssh worker2
+  829  ssh worker1
+  830  ssh worker3
+  831  poweroff 
+  832  clear 
+  833  uptime 
+  834  kubectl create ns teachers 
+  835  kubectl create ns students 
+  836  kubectl get ns 
+  837  kubectl config get-contexts 
+  838  sudo useradd -G wheel anna 
+  839  sudo passwd anna 
+  840  cat /etc/passwd 
+  841  openssl genrsa -out anna.key 2048 
+  842  ll 
+  843  openssl req -new -key anna.key -out anna.csr -subj "/CN=anna/O=teachers"
+  844  ll
+  845  sudo openssl x509 -req -in anna.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out anna.crt -days 365
+  846  ll
+  847  kubectl config view | less 
+  848  kubectl config set-credentials anna --client-certificate=./anna.crt --client-key=./anna.key 
+  849  kubectl config view | less 
+  850  kubectl get ns 
+  851  kubectl config set-context anna-context --cluster=kubernetes --namespace=teachers --user=anna
+  852  kubectl config view | less 
+  853  kubectl --context=anna-context get pods -n teachers 
+  854  kubectl --context=anna-context get pods
+  855  kubectl config get-contexts 
+  856  ll cka 
+  857  mv cka/staff-role.yaml cka/security/teachers-role.yaml 
+  858  vim cka/security/teachers-role.yaml 
+  859  kubectl create -f cka/security/teachers-role.yaml 
+  860  kubectl delete -f cka/security/teachers-role.yaml 
+  861  vim cka/security/teachers-role.yaml 
+  862  kubectl create -f cka/security/teachers-role.yaml 
+  863  mv cka/rolebind.yaml cka/security/teachers-rolebind.yaml 
+  864  vim cka/security/teachers-rolebind.yaml 
+  865  kubectl create -f cka/security/teachers-rolebind.yaml 
+  866  kubectl --context=anna-context get pods 
+  867  vim cka/security/teachers-role.yaml 
+  868  kubectl delete -f cka/security/teachers-rolebind.yaml 
+  869  kubectl delete -f cka/security/teachers-role.yaml 
+  870  vim cka/security/teachers-role.yaml 
+  871  kubectl create -f cka/security/teachers-role.yaml 
+  872  vim cka/security/teachers-role.yaml 
+  873  kubectl create -f cka/security/teachers-role.yaml 
+  874  vim cka/security/teachers-rolebind.yaml 
+  875  vim cka/security/teachers-role.yaml 
+  876  vim cka/security/teachers-rolebind.yaml 
+  877  kubectl create -f cka/security/teachers-rolebind.yaml 
+  878  kubectl --context=anna-context get pods 
+  879  kubectl --context=anna-context get pods -n default 
+  880  kubectl create deployment teachersnginx --image=nginx 
+  881  kubectl --context=anna-context get pods 
+  882  kubectl --context=anna-context get deployments  
+  883  kubectl -n teachers describe role teachers-role | less 
+  884  kubectl delete deployments.apps teachersnginx
+  885  kubectl --context=anna-context create deployment teachersnginx --image=nginx 
+  886  kubectl get all -n teachers 
+  887  kubectl --context=anna-context get deployments  
+  888  history | less 
+  889  ll cka | grep student
+  890  vim cka/jan20-live-class-student-history.txt
+  891  mv cka/rolebindstudents.yaml cka/security/students-rolebind.yaml
+  892  mv cka/students-role.yaml cka/security/students-role.yaml 
+  893  ll cka/security/
+  894  cd cka 
+  895  vim security/students-role.yaml 
+  896  vim security/students-rolebind.yaml 
+  897  vim security/students-role.yaml 
+  898  kubectl apply -f security/students-role.yaml 
+  899  kubectl apply -f security/students-rolebind.yaml 
+  900  kubectl config view | less
+  901  kubectl config set-context anna-students-context --cluster=kubernetes --namespace=students --user=anna 
+  902  kubectl --context=anna-students-context get pods 
+  903  kubectl --context=anna-students-context create deployment studentsnginx --image=nginx 
+  904  vim security/students-role.yaml 
+  905  kubectl create deployment studentsnginx --image=nginx -n students 
+  906  kubectl --context=anna-students-context get pods 
+  907  history | less 
+  908  kubectl -n students describe role 
+  909  kubectl -n students describe role students-role
+  910  kubectl -n students describe role teachers-role 
+  911  kubectl -n teachers  describe role teachers-role 
+  912  kubectl get pods 
+  913  ll | grep '^d'
+  914  mkdir lab10
+  915  cp security/teachers-role.yaml lab10/
+  916  cp security/teachers-rolebind.yaml lab10/
+  917  vim security/security-context.yaml 
+  918  mv lab10/teachers-role.yaml lab10/bob-role.yaml 
+  919  mv lab10/teachers-rolebind.yaml lab10/bob-rolebind.yaml 
+  920  kubectl create ns bob 
+  921  kubectl config get-contexts 
+  922  sudo useradd -G wheel bob
+  923  sudo passwd bob 
+  924  cd lab10/
+  925  openssl genrsa -out bob.key 2048 
+  926  ll
+  927  openssl req -new -key bob.key -out bob.csr -subj "/CN=bob/O=lab10"
+  928  kubectl delete ns bob 
+  929  kubectl create ns lab10 
+  930  sudo openssl x509 -req -in bob.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out bob.crt -days 365 
+  931  ll 
+  932  kubectl config view | less 
+  933  kubectl config set-credentials bob --client-certificate=./bob.crt --client-key=./bob.key 
+  934  kubectl config view | less 
+  935  kubectl config set-context bob-context --cluster=kubernetes --namespace=lab10 --user=bob 
+  936  kubectl config view | less 
+  937  kubectl --context=bob-context create deployment bobnginx --image=nginx 
+  938  vim bob-role.yaml 
+  939  vim bob-rolebind.yaml 
+  940  vim bob-role.yaml 
+  941  kubectl apply -f bob-role.yaml 
+  942  kubectl apply -f bob-rolebind.yaml 
+  943  kubectl --context=bob-context create deployment bobnginx --image=nginx 
+  944  kubectl --context=bob-context get pods -o wide 
+  945  history | less 
+  946  su - 
+  947  kubectl get pods --all-namespaces -o wide | grep calico
+  948  ip a 
+  949  kubectl get pods -n kube-system calico-node-w7psh -o yaml 
+  950  kubectl exec -n kube-system calico-node-w7psh ip route show 
+  951  kubectl exec -n kube-system calico-node-w7psh -- ip route show 
+  952  kubectl exec -n kube-system calico-node-w7psh -- ip a show 
+  953  kubectl get svc -n kube-system 
+  954  sudo systemctl status firewalld 
+  955  kubectl get pods 
+  956  kubectl exec nginx-on-ssd -- nslookup kubernetes 
+  957  kubectl exec nginx-toleration-pod -- nslookup kubernetes 
+  958  kubectl get pods -n kube-system 
+  959  kubectl describe pod coredns-74ff55c5b-7tbx6 | less 
+  960  kubectl -n kube-system describe pod coredns-74ff55c5b-7tbx6 | less 
+  961  kubectl -n kube-system delete pod coredns-74ff55c5b-7tbx6
+  962  kubectl -n kube-system delete pod coredns-74ff55c5b-8b6m7
+  963  kubectl -n kube-system get pods 
+  964  kubectl get pods 
+  965  kubectl exec -it nginx-toleration-pod -- cat /etc/resolv.conf 
+  966  kubectl exec -it nginx-toleration-pod -- nslookup kubernetes 
+  967  history | less 
+  968  cd .. 
+  969  ll | grep '^d'
+  970  vim networkpolicy-example.yaml 
+  971  ssh root@worker1 poweroff 
+  972  ssh root@worker2 poweroff 
+  973  ssh root@worker3 poweroff 
+  974  sudo poweroff 
+  975  clear
+  976  kubectl get all --all-namespaces 
+  977  uptime
+  978  kubeadm config view | less 
+  979  kubectl get secrets -n kube-system
+  980  kubectl -n kube-system get secrets coredns-token-bws4h
+  981  kubectl -n kube-system get secrets coredns-token-bws4h -o yaml 
+  982  ssh root@worker3
+  983  kubectl get pods -o wide | grep worker3
+  984  history | less 
+  985  ssh root@worker3
+  986  cd cka 
+  987  ETCDCTL_API=3 etcdctl snapshot save mysnapshot.db --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key
+  988  sudo ETCDCTL_API=3 etcdctl snapshot save mysnapshot.db --endpoints=https://127.0.0.1:2379 --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/server.crt --key=/etc/kubernetes/pki/etcd/server.key
+  989  ls -ltr
+  990  sudo yum provides */etcdctl 
+  991  sudo yum install -y etcd 
+  992  ETCDCTL_API=3 etcdctl -h 
+  993  sudo ls -l /etc/kubernetes/pki 
+  994  sudo ls -l /etc/kubernetes/pki/etcd 
+  995  ps aux | grep etcd 
+  996  ll 
+  997  ssh root@worker1 poweroff 
+  998  ssh root@worker2 poweroff 
+  999  ssh root@worker3 poweroff 
+ 1000  sudo poweroff 
+ 1001  cat /etc/passwd 
+ 1002  su - 
+ 1003  history > history-artur-control 

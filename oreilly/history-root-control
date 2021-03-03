@@ -1,0 +1,298 @@
+    1  poweroff 
+    2  hostname control 
+    3  reboot 
+    4  vi /etc/hostname 
+    5  reboot 
+    6  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3 
+    7  ip a 
+    8  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3 
+    9  service networking restart 
+   10  service network restart 
+   11  ip a 
+   12  ping 8.8.8.8
+   13  ip a 
+   14  vi /etc/sysconfig/network-scripts/ifcfg-enp0s8
+   15  poweroff 
+   16  vi /etc/sysconfig/network-scripts/ifcfg-enp0s8
+   17  service network restart 
+   18  ip a 
+   19  poweroff 
+   20  exit 
+   21  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   22  service network restart 
+   23  ping 8.8.8.8
+   24  ping 192.168.14.1
+   25  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   26  systemctl restart network 
+   27  ping 8.8.8.8
+   28  ping 192.168.14.1 
+   29  vi /etc/sysconfig/network-scripts/ifcfg-enp0s8
+   30  ip r 
+   31  ip a 
+   32  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   33  ip a 
+   34  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   35  cp /etc/sysconfig/network-scripts/ifcfg-enp0s3 /etc/sysconfig/network-scripts/ifcfg-enp0s3.bk 
+   36  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   37  systemctl restart network 
+   38  ip a 
+   39  ping wp.pl
+   40  ping 8.8.8.8
+   41  ping 192.168.14.1
+   42  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   43  systemctl restart network 
+   44  service network stop 
+   45  service network start 
+   46  ip a 
+   47  ping wp.pl
+   48  rm /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   49  mv /etc/sysconfig/network-scripts/ifcfg-enp0s3.bk  /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   50  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   51  systemctl restart network 
+   52  ping wp.pl
+   53  ping 8.8.8.8
+   54  ip a 
+   55  poweroff 
+   56  yum install traceroute 
+   57  traceroute 8.8.8.8
+   58  ping 10.0.2.2
+   59  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   60  sytemctl restart network 
+   61  service network restart 
+   62  ping wp.pl
+   63  ip a 
+   64  ping 10.0.2.2 
+   65  ping 8.8.8.8
+   66  ip r 
+   67  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   68  systemctl restart network 
+   69  ip r 
+   70  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   71  systemctl restart network 
+   72  ip r 
+   73  cat /etc/resolv.conf
+   74  ip route add 0.0.0.0/0 via 10.0.2.2
+   75  ping 8.8.8.8
+   76  ip r 
+   77  ping wp.pl
+   78  vi /etc/sysconfig/network-scripts/route-enp0s3
+   79  ip a 
+   80  ip r 
+   81  reboot 
+   82  vi /etc/sysconfig/network-scripts/route-enp0s3
+   83  systemctl restart network.service 
+   84  ip r 
+   85  ping wp.pl
+   86  ping 8.8.8.8 
+   87  ip route add 0.0.0.0/0 via 10.0.2.2 
+   88  ping 8.8.8.8 
+   89  nmcli connection reload 
+   90  nmcli connection up enp0s3 
+   91  ip r 
+   92  vi /etc/sysconfig/network-scripts/route-enp0s3
+   93  rm  /etc/sysconfig/network-scripts/route-enp0s3
+   94  nmcli connection modify "enp0s3" +ipv4.routes "0.0.0.0/0 10.0.2.2"
+   95  ping 10.0.2.2
+   96  reboot 
+   97  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+   98  service network restart 
+   99  ip r 
+  100  ip a 
+  101  vi /etc/sysconfig/network-scripts/route-enp0s3
+  102  ip r 
+  103  poweroff 
+  104  exit
+  105  yum install -y vim bash-completion 
+  106  git clone https://github.com/sandervanvugt/cka 
+  107  yum install -y git 
+  108  git clone https://github.com/sandervanvugt/cka 
+  109  ls 
+  110  cd cka 
+  111  ll 
+  112  vim setup-docker.sh 
+  113  vi /etc/hosts 
+  114  ssh worker1
+  115  ./setup-docker.sh 
+  116  vim setup-kubetools.sh 
+  117  ./setup-kubetools.sh 
+  118  ssh worker1
+  119  free -m 
+  120  ping worker2
+  121  cd
+  122  cd cka 
+  123  kubeadm init 
+  124  poweroff 
+  125  vi /etc/sysconfig/network-scripts/route-enp0s3
+  126  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+  127  systemctl restart network 
+  128  ip a 
+  129  ping 10.0.2.2
+  130  cat /etc/sysconfig/network-scripts/ifcfg-enp0s8
+  131  ping 8.8.8.8
+  132  ping wp.pl
+  133  vi /etc/sysconfig/network-scripts/ifcfg-enp0s3
+  134  systemctl restart network 
+  135  ping wp.pl
+  136  ip a 
+  137  ping 192.168.4.111
+  138  cat /etc/sysconfig/network-scripts/ifcfg-enp0s8
+  139  cat /etc/sysconfig/network-scripts/ifcfg-enp0s3
+  140  cd cka 
+  141  kubeadm init 
+  142  ping 10.0.2.110 
+  143  vim kube-join.sh 
+  144  su - artur 
+  145  vim /etc/hosts
+  146  ssh worker1
+  147  ip a 
+  148  ping 10.0.2.111
+  149  ping 10.0.2.2
+  150  ping wp.pl
+  151  ping worker2
+  152  kubeadm join 192.168.4.110:6443 --token t9e2m1.z0om901a21hjfse4     --discovery-token-ca-cert-hash sha256:d3b31f779264ed83db709d6b5cc13bc08e0cbb752d76e9e1fecccd99b25e2b6a
+  153  ssh worker1
+  154  traceroute 10.0.2.110 
+  155  traceroute 10.0.2.111
+  156  ping 10.0.2.111
+  157  ip r 
+  158  ip route add 10.0.2.0/24 via 10.0.2.2 
+  159  ping 10.0.2.111
+  160  ip r 
+  161  ssh worker1
+  162  poweroff 
+  163  kubeadm reset 
+  164  exit
+  165  ssh worker1
+  166  kubectl get nodes 
+  167  exit 
+  168  kubeadm status 
+  169  kubeadm --help 
+  170  kubeadm version 
+  171  kubeadm init 
+  172  ping 10.0.2.111
+  173  kubeadm init --help 
+  174  kubeadm reset 
+  175  ip a 
+  176  kubeadm init --apiserver-advertise-address=192.168.4.110
+  177  ll
+  178  cd cka 
+  179  vim kube-join.sh 
+  180  su - artur 
+  181  cd /etc/
+  182  cd bash_completion.d/
+  183  ll
+  184  exit 
+  185  cd cka 
+  186  history 
+  187  exit 
+  188  kubectl config delete-cluster 
+  189  kubectl cluster-info 
+  190  exit 
+  191  ls -al 
+  192  exit
+  193  history 
+  194  kubeadm init --apiserver-advertise-address=192.168.4.110
+  195  reboot 
+  196  kubeadm init --apiserver-advertise-address=192.168.4.110
+  197  exit
+  198  kubeadm reset 
+  199  kubeadm init --apiserver-advertise-address=192.168.4.110
+  200  su - artur
+  201  rm -rf /etc/kubernetes
+  202  kubeadm init --apiserver-advertise-address=192.168.4.110
+  203  rm -rf /vat/lib/etcd
+  204  kubeadm init --apiserver-advertise-address=192.168.4.110
+  205  ls -al /vat/lib/etcd 
+  206  ls -al /var/lib/etcd/
+  207  ls -al /var/lib/etcd/member
+  208  rm -rf  /var/lib/etcd/*
+  209  ls -al /var/lib/etcd/member
+  210  ls -al /var/lib/etcd/
+  211  kubeadm init --apiserver-advertise-address=192.168.4.110
+  212  kubectl config delete-cluster 
+  213  kubectl config delete-cluster kubernetes
+  214  ls -al 
+  215  su - artur
+  216  kubeadm reset 
+  217  rm -f /etc/cni/net.d
+  218  rm -rf /etc/cni/net.d
+  219  rm -rf $HOME/.kube/
+  220  exit
+  221  vi /etc/sysconfig/network-scripts/ifcfg-enp0s8
+  222  service network restart 
+  223  vi /etc/hosts 
+  224  exit
+  225  cd cka 
+  226  ./setup-docker.sh 
+  227  vim setup-kubetools.sh 
+  228  ./setup-kubetools.sh 
+  229  ssh worker1
+  230  ssh worker2
+  231  ssh worker3
+  232  free -m 
+  233  ip a 
+  234  kubeadm init --apiserver-advertise-address=172.16.0.110
+  235  exit 
+  236  ssh worker1
+  237  ping worker1
+  238  ssh worker1
+  239  ping worker1
+  240  ssh worker1
+  241  kubectl get all --all-namespaces 
+  242  kubectl cluster-info 
+  243  exit 
+  244  kubeadm reset 
+  245  rm -rf /etc/cni/net.d
+  246  rm -rf $HOME/.kube/config file
+  247  exit
+  248  rm -rf /var/lib/kubelet/
+  249  rm -rf /etc/kubernetes/
+  250  ssh worker1
+  251  ssh worker2
+  252  ssh worker3
+  253  ssh worker1
+  254  ssh worker2
+  255  ssh worker1
+  256  ssh worker3
+  257  service docker restart 
+  258  ssh worker1
+  259  ssh worker2
+  260  ssh worker3
+  261  uptime 
+  262  reboot 
+  263  kubeadm -h 
+  264  kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-advertise-address=172.16.0.110
+  265  su - artur 
+  266  kubectl cluster-info 
+  267  exit 
+  268  ssh worker1
+  269  ssh worker3 
+  270  exit
+  271  vim /etc/kubernetes/manifests/kube-apiserver.yaml 
+  272  exit
+  273  vim /etc/cni/net.d/10-calico.conflist 
+  274  kubectl get pods --all-namespaces -o wide | grep calico 
+  275  exit
+  276  journalctl | grep kubelet 
+  277  journalctl | grep etcd 
+  278  cd /var/log/containers/
+  279  ll
+  280  ls 
+  281  less coredns-74ff55c5b-7bwrc_kube-system_coredns-046f50542770f60f2eb7bcd529f4b42bbb84e60dea19ed0419a21f4479a0014b.log
+  282  ssh worker1
+  283  history | less 
+  284  exit
+  285  docker ps | grep api
+  286  cd /var/log/containers/
+  287  ls
+  288  less kube-apiserver-control.localdomain_kube-system_kube-apiserver-1960a75765ed9386687a27aeb2b56397804a95f66d51e2096da466d9c9580ca2.log
+  289  ps aux | grep apiserver 
+  290  cd /etc/kubernetes/manifests/
+  291  ls
+  292  vim kube-apiserver.yaml 
+  293  history | less 
+  294  exit
+  295  a
+  296  cd cka 
+  297  ls -ltr 
+  298  history > ~/history-root-control
