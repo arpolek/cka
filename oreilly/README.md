@@ -1,1 +1,1 @@
-# files for my CKA online course
+# files for my CKA course on Oreilly
